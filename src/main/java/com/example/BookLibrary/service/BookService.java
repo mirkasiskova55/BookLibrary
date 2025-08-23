@@ -24,4 +24,20 @@ public class BookService {
     public Book findById(Long id){
         return bookRepository.findById(id).orElseThrow();
     }
+
+    public Book updateBook(Long id,Book book ) {
+        Book updateBook = bookRepository.findById(id).orElseThrow();
+        updateBook.setAuthor(book.getAuthor());
+        updateBook.setTitle(book.getTitle());
+        updateBook.setPublishedYear(book.getPublishedYear());
+        updateBook.setIsbn(book.getIsbn());
+        return bookRepository.save(updateBook);
+    }
+
+    public String deleteBook (Long id){
+        bookRepository.deleteById(id);
+        return "Book deleted";
+    }
+
+
 }
