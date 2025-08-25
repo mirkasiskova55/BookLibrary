@@ -1,13 +1,15 @@
 package com.example.BookLibrary.controller;
 
+import com.example.BookLibrary.Dto.BookCopyDtoCreate;
+import com.example.BookLibrary.Dto.BookCopyDtoOut;
+import com.example.BookLibrary.Dto.BookCopyDtoUpdate;
 import com.example.BookLibrary.entity.BookCopy;
 import com.example.BookLibrary.repository.BookCopyRepository;
 import com.example.BookLibrary.service.BookCopyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -18,9 +20,20 @@ public class BookCopyController {
     @Autowired
     private BookCopyService bookCopyService;
 
+    @GetMapping("/books/{id}/copies")
+    public List<BookCopyDtoOut> getCopies(){
+        return BookCopyDtoOut.mapToDtoList(bookCopyService.findAll());
+    }
+
     @PostMapping("/books/{id}/copies")
-    public BookCopy createBookCopy(@RequestBody BookCopy  bookCopy){
-        return bookCopyService.saveBookCopy(bookCopy);
+    public BookCopyDtoOut createBookCopy(@PathVariable Long id, @RequestBody BookCopyDtoCreate bookCopy){
+        return BookCopyDtoOut.mapToDto(bookCopyService.saveBookCopy(id, bookCopy));
+    }
+
+    @PostMapping("/books/{id}/copies/{copyId}")
+    public BookCopyDtoOut updateBookCopy(@PathVariable Long id, @RequestBody BookCopyDtoUpdate bookCopyDtoUpdate){
+        BookCopy bookcopy = bookCopyService.updateBookCopy(id,bookCopyDtoUpdate);
+        return BookCopyDtoOut.mapToDto(bookcopy);
     }
 }
 
