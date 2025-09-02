@@ -3,6 +3,8 @@ package com.example.BookLibrary.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -18,10 +20,9 @@ public class Book {
     @Column(nullable = false)
     private String author;
     @Column(nullable = false, unique = true)
-
     private String isbn;
     @Column(nullable = false)
-
     private Integer publishedYear;
-
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<BookCopy> copies;
 }

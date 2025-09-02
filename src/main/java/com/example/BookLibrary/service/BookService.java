@@ -1,5 +1,7 @@
 package com.example.BookLibrary.service;
 
+import com.example.BookLibrary.Dto.BookDtoCreate;
+import com.example.BookLibrary.Dto.BookDtoUpdate;
 import com.example.BookLibrary.entity.Book;
 import com.example.BookLibrary.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +19,23 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book saveBook (Book in){
-        return bookRepository.save(in);
+    public Book saveBook (BookDtoCreate in){
+        Book book = new Book();
+        book.setTitle(in.getTitle());
+        book.setAuthor(in.getAuthor());
+        book.setIsbn(in.getIsbn());
+        book.setPublishedYear(in.getPublishedYear());
+        return bookRepository.save(book);
     }
 
     public Book findById(Long id){
         return bookRepository.findById(id).orElseThrow();
     }
 
-    public Book updateBook(Long id,Book book ) {
+    public Book updateBook(Long id, BookDtoUpdate bookDtoUpdate ) {
         Book updateBook = bookRepository.findById(id).orElseThrow();
-        updateBook.setAuthor(book.getAuthor());
-        updateBook.setTitle(book.getTitle());
-        updateBook.setPublishedYear(book.getPublishedYear());
-        updateBook.setIsbn(book.getIsbn());
+        updateBook.setTitle(bookDtoUpdate.getTitle());
+        updateBook.setPublishedYear(bookDtoUpdate.getPublishedYear());
         return bookRepository.save(updateBook);
     }
 

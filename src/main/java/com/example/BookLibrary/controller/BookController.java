@@ -1,5 +1,8 @@
 package com.example.BookLibrary.controller;
 
+import com.example.BookLibrary.Dto.BookDtoCreate;
+import com.example.BookLibrary.Dto.BookDtoOut;
+import com.example.BookLibrary.Dto.BookDtoUpdate;
 import com.example.BookLibrary.entity.Book;
 import com.example.BookLibrary.repository.BookRepository;
 import com.example.BookLibrary.service.BookService;
@@ -19,24 +22,26 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books")
-    public List<Book> getBooks(){
-        return bookService.findAll();
+    public List<BookDtoOut> getBooks(){
+        return BookDtoOut.mapToDtoList(bookService.findAll());
     }
 
     @PostMapping("/books")
-    public Book createBook(@RequestBody Book book){
-        return bookService.saveBook(book);
+    public BookDtoOut createBook(@RequestBody BookDtoCreate book){
+        return BookDtoOut.mapToDto(bookService.saveBook(book));
     }
 
     @GetMapping("/books/{id}")
-    public Book getBook(@PathVariable Long id){
-        return bookService.findById(id);
+    public BookDtoOut getBook(@PathVariable Long id){
+        return BookDtoOut.mapToDto(bookService.findById(id));
     }
 
     @PostMapping("/books/{id}")
-    public Book updateBook (@PathVariable Long id, @RequestBody Book book){
-        return bookService.updateBook(id, book);
+    public BookDtoOut updateBook (@PathVariable Long id, @RequestBody BookDtoUpdate bookDtoUpdate){
+        Book book = bookService.updateBook(id,bookDtoUpdate);
+        return BookDtoOut.mapToDto(book);
     }
+
     @DeleteMapping("/books/{id}")
     public String deleteBook (@PathVariable Long id){
         return bookService.deleteBook(id);

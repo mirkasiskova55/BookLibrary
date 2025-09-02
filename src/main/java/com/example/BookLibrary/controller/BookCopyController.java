@@ -21,7 +21,7 @@ public class BookCopyController {
     private BookCopyService bookCopyService;
 
     @GetMapping("/books/{id}/copies")
-    public List<BookCopyDtoOut> getCopies(){
+    public List<BookCopyDtoOut> getCopies(@PathVariable Long id){
         return BookCopyDtoOut.mapToDtoList(bookCopyService.findAll());
     }
 
