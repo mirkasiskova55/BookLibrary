@@ -3,9 +3,11 @@ package com.example.BookLibrary.controller;
 import com.example.BookLibrary.Dto.BookDtoCreate;
 import com.example.BookLibrary.Dto.BookDtoOut;
 import com.example.BookLibrary.Dto.BookDtoUpdate;
+import com.example.BookLibrary.Dto.PageRequestDto;
 import com.example.BookLibrary.entity.Book;
 import com.example.BookLibrary.repository.BookRepository;
 import com.example.BookLibrary.service.BookService;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +23,10 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/books")
-    public List<BookDtoOut> getBooks(){
-        return BookDtoOut.mapToDtoList(bookService.findAll());
-    }
+//    @GetMapping("/books")
+//    public List<BookDtoOut> getBooks(){
+//        return BookDtoOut.mapToDtoList(bookService.findAll());
+//    }
 
     @PostMapping("/books")
     public BookDtoOut createBook(@RequestBody BookDtoCreate book){
@@ -45,6 +47,12 @@ public class BookController {
     @DeleteMapping("/books/{id}")
     public String deleteBook (@PathVariable Long id){
         return bookService.deleteBook(id);
+    }
+
+    @GetMapping("/books")
+    public Page<BookDtoOut> getBooks(@ModelAttribute PageRequestDto pageRequestDto){
+        return bookService.findAll(pageRequestDto)
+                .map(BookDtoOut::mapToDto);
     }
 
 }
